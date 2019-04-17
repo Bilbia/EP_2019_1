@@ -1,7 +1,7 @@
-Exercício Programa - 2019/1 - Design de Software
+﻿Exercício Programa - 2019/1 - Design de Software
 ------------------------------------------------
 
 Alunos: 
-- Fulano da Silva, fulanos@insper.edu.br
-- Sicrano de Almeida, sicranoa1@insper.edu.br
+- Beatriz Muniz de Castro e Silva, beatrizmcs@al.insper.edu.br / biamcs2000@gmail.com
+- Gustavo Pazemeckas, gustavo.pazemeckas@gmail.com
 
