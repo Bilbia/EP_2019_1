@@ -269,18 +269,22 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                     ok=input(": ")
         return inventario
     
-            
-
-    cenarios, nome_cenario_atual = carregar_cenarios()
 
     game_over = False
     while not game_over:
         cenario_atual = cenarios[nome_cenario_atual]
-        print("\n\n{0}\n\n". format("_"*len(cenario_atual["titulo"]))) #eu acho que fica melhor colocar a linha em cima do titulo, entre ações, apenas - Bilbia
-        print(cenario_atual["titulo"])
-        print("\n\n")
-        print(cenario_atual["descricao"])
-        print("\n\n")
+        if "titulo" in cenario_atual:
+            print("\n\n{0}\n\n". format("_"*len(cenario_atual["titulo"]))) #eu acho que fica melhor colocar a linha em cima do titulo, entre ações, apenas - Bilbia
+            print(cenario_atual["titulo"])
+            print("\n\n")
+            print(cenario_atual["descricao"])
+            print("\n\n")
+        else:    
+          
+            print("\n\n{0}". format("_"*20))
+            print("\n\n")
+            print(cenario_atual["descricao"])
+            print("\n\n")
         
     
         opcoes = cenario_atual['opcoes']
@@ -292,6 +296,7 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
             if escolha == "desistir":
                 print("Você desistiu da sua procura. Uma pena, vai pegar DP em DesSoft")
                 game_over=True
+                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
             else:
                 nome_cenario_atual = cenario_atual["volta"]
                 
@@ -314,38 +319,55 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
             else:
                 escolha = arruma(input(": "))
                 if escolha=="desistir":
-                    print("\n\nVocê desistiu da sua procura. Uma pena, vai pegar DP em DesSoft")
-                    game_over=True       
+                    print("\n\nVocê desistiu da sua procura. Uma pena, vai pegar DP em DesSoft\n\n")
+                    game_over=True
+                    return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                elif escolha=="usar canecao":
+                    hp, maxhp, inventario = heal_caneca(hp, maxhp, inventario)
+                    
                 elif escolha in opcoes:
                     if escolha in cenarios: 
                         nome_cenario_atual = escolha
+                        
                     elif cenario_atual["contador"]==0:
-                        if escolha == "brigar":
-                            escolha, dinheiro, hp =combate(insperboys,hp,dinheiro,armor)
+                        if escolha == "batalhar":
+                            print (cenario_atual["titulo"])
+                            if cenario_atual["monstro"] in monstros:
+                                monstro=monstros[cenario_atual["monstro"]]
+                                escolha, dinheiro, hp =combate(monstro,hp,dinheiro,armor)
                             if escolha=="desistir":
+                                game_over=True
+                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                            elif hp<=0:
+                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
                                 game_over=True
                             else:
                                 nome_cenario_atual = escolha
                         elif escolha == "gritar":
-                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
-                                print("Você saiu gritando para saber se alguém viu o Raul mas acabou sendo expulso da biblioteca. Honestamente, você nunca foi numa biblioteca?")
-                                print("\n\n[OK]")
-                                ok = input(": ")
-                                cenario_atual["contador"]=1
-                                cenario_atual["descricao"]=cenario_atual["segunda"]
-                                if escolha=="desistir":
-                                    game_over=True
-                                else:
-                                    nome_cenario_atual = cenario_atual["volta"]
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você saiu gritando para saber se alguém viu o Raul mas acabou sendo expulso da biblioteca. Honestamente, você nunca foi numa biblioteca?")
+                            print("\n\n[OK]")
+                            ok = input(": ")
+                            cenario_atual["contador"]=1
+                            cenario_atual["descricao"]=cenario_atual["segunda"]
+                            if escolha=="desistir":
+                                game_over=True
+                                hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                            else:
+                                nome_cenario_atual = cenario_atual["volta"]
                         elif escolha=="ver protótipo": 
                             cenarios["-1"]["contador"]=1
                             cenarios["4"]["contador"]=1
                             cenarios["5"]["contador"]=1
-                            
+                        elif escolha=="beber":
+                            hp, maxhp, inventario = heal(hp, maxhp, inventario)
+                            print ("HP de {0}: {1}". format(nome,hp))
+                        elif escolha=="encher canecao":
+                            inventario = encher(inventario)
                         else:
                             print("\n\nComando inválido\n")
                     elif cenario_atual["contador"]==2:
-                       dinheiro, inventario, armor, capacidade,hp,maxhp = compra(dinheiro,inventario,armor,capacidade,hp,maxhp,cenario_atual)
+                        dinheiro,inventario,armor,capacidade,hp,maxhp = compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual,cenarios)
                     else:
                         print("\n\nComando inválido\n")
                         escolha = arruma(input(": "))
