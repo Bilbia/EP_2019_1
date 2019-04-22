@@ -323,3 +323,6 @@ if __name__ == "__main__":
     print("[OK]")
     ok = input(": ")
     main()
+    with open('Binha_Noza.txt','r') as arquivo:
+       conteudo = arquivo.read()
+       print (conteudo)
