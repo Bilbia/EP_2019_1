@@ -147,6 +147,64 @@ def main():
             else:
                 print("\n\nComando inválido")
                 print("\n\n____________")
+                
+    #    função do sistema de compras
+    def compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual):
+        for k,v in cenario_atual["produtos"].items():
+                print("{0}: {1}". format(k,v[0]))
+                print("Preço: R${0}\n". format(v[1]))
+        print("\nBALANÇO DA CARTEIRA: {0} REAIS\n\n". format(dinheiro))
+        for k,v in opcoes.items():
+            print(v)
+        escolha = arruma(input(": "))
+        if escolha in opcoes:
+            if escolha in cenarios: 
+                nome_cenario_atual = escolha
+            elif cenario_atual["contador"]==1:
+                ok = input(": ")
+                escolha = cenario_atual["volta"]
+            elif cenario_atual["contador"]==2:
+               dinheiro, inventario, armor, capacidade,hp,maxhp = compra(dinheiro,inventario,armor,capacidade,hp,maxhp)
+                
+            else:
+                print("\n\nComando inválido\n")
+                escolha = arruma(input(": "))
+        else:
+            print("\n\nComando inválido")
+        produtos={
+                    "casaco":(20,"armor"),
+                    "sacochila":(3,"capacidade"),
+                    "canecao":"vazio"
+                    }
+        for k,v in produtos.items():
+            if k in escolha:
+                if k not in inventario:
+                    if dinheiro>=cenario_atual["produtos"][k][1]:
+                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                        print("Você comprou um(a) {0}. Uma pena que não é de {1}.". format(k, tema_umb))
+                        ok=input(": ")
+                        dinheiro -= cenario_atual["produtos"][k][1]
+                        inventario[k]=v
+                        
+                    else:
+                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                        print("Você não tem dinheiro suficiente para comprar um(a) {0}. Nem todo mundo pode ser Bettina nessa vida.". format (k))
+                        ok=input(": ")
+                else:
+                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                    print("Você já tem esse item.")
+                    ok=input(": ")
+        for k,v in produtos.items():
+            if "armor" in v:
+                armor+=v[0]
+            elif "capacidade" in v:
+                capacidade+=v[0]
+            elif "hp" in v:
+                hp+=v[0]
+            elif "maxhp" in v:
+                maxhp+=v[0]
+            
+        return dinheiro, inventario,armor,capacidade,hp,maxhp,nome_cenario_atual
             
 
     cenarios, nome_cenario_atual = carregar_cenarios()
