@@ -24,6 +24,22 @@ insperboys = {
             "ok" : "\n\nCom a sua dignidade reinstaurada, você resolve voltar para o saguão e continuar a busca pelo Raul.\n\n",
             "volta" : "saguao"
             }
+humberto = {
+            "nome": "Humberto e os Ninjas",
+            "start" : "O Humberto está chocado que você desafiou ele, mas ele não foge da luta. Atrás dele, os ninjas também se juntam à luta.",
+            "ataques" : {
+                    "Dicionários":30,
+                    "Exemplos complicados":20,
+                    "Splash":10,
+                    "Shuriken":15,
+                    "Provas passadas":15
+                    },
+            "dano" : ("\n\nHumberto e os ninjas sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"])),
+            "hp" : 50,
+            "money": random.randint(20,100),
+            "ok" : "\n\nVocê conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\nO Humberto não sabe exatamente onde está o Raul, mas mencionou o Techlab. Talvez você devesse ir lá checar.",
+            "volta" : "sair da sala"
+            }
 
 #arruma o input do usuário pra ele poder escrever em qualquer formato (minúsculo ou maiúsculo) e com ou sem acentos
 def arruma(string):     
@@ -48,7 +64,6 @@ def carregar_cenarios():
        cenarios= json.loads(conteudo)
        nome_cenario_atual = "saguao"
        return cenarios, nome_cenario_atual
-
 
 
 def main():
