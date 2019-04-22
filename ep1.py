@@ -5,6 +5,8 @@
 # - aluno B: Gustavo Pazemeckas, gustavorp3@al.insper.edu.br / gustavo.pazemeckas@gmail.com
 import random
 
+##as funcões ok e algumas funções escolha são vazias para receber um input qualquer do usuário e agir como um "ok" -> próxima cena
+
 #dados dos monstros
 insperboys = {
             "nome": "InsperBoys",
@@ -89,6 +91,78 @@ def main():
     maxhp = 50
     armor = 0
     capacidade = 5
+    
+    
+    #    função de combate
+    def combate(monstro,hp,dinheiro,armor):
+        hp_monstro = monstro["hp"]      #transforma o hp do monstro em uma variável para que possa ser calculada
+        
+        #dados do insperboys que precisam ser adicionados dentro da funcão
+        insb_money = random.randint(20,100)
+        insperboys["end"]= "Parabéns! Você derrotou os Insperboys!\n\n\nNa correria para pedir um Uber para fugir, eles acabaram deixando cair a vape pen deles e {0} reais. Bem, achado não é roubado.". format(insb_money)
+        insperboys["vida"]=("\n\nHP InsperBoys: {0}". format(hp_monstro))
+        insperboys["atplayer"]=("{0} atacou os Insper Boys com seu guarda chuva de {1}!". format(nome,tema_umb))
+        
+        print("\n\n____________\n\n")
+        print (monstro["start"])
+        
+        fight = True
+        while fight:
+            print (monstro["vida"])
+            print ("HP de {0}: {1}". format(nome,hp))
+            print("\n\n[ATACAR]")
+            print("[FUGIR]")
+            escolha = arruma(input(": "))
+            if escolha=="desistir":
+                print("Você desistiu da sua procura. Uma pena, vai pegar DP em DesSoft")
+                fight = False
+                return escolha, dinheiro, hp
+                
+            elif escolha == "atacar":
+                 print("\n\n____________\n\n")
+                 print(monstro["atplayer"])
+                 print(monstro["dano"])
+                 hp_monstro-= inventario["Armas"]["Guarda Chuva"]
+                 if hp_monstro>0:
+                    ataque = random.choice(list(monstro["ataques"]))
+                    
+                    #frase de contra-ataque baseada no ataque escolhido
+                    insperboys["back"]=("Os Insper Boys atacaram de volta com {0}.". format(ataque))
+                    
+                    print(monstro["back"], "\n\n")
+                    print("{0} sofreu {1} de dano.". format(nome,int(monstro["ataques"][ataque]*(1-armor/100))))      #quanto de dano o jogador recebeu
+                    hp-=int(monstro["ataques"][ataque]*(1-armor/100))
+                    monstro["vida"]=("\n\nHP {0}: {1}". format(monstro["nome"],hp_monstro))
+                    monstro["hp"] = hp_monstro
+                    
+                 else:
+                    print(monstro["end"])
+                    for k in monstro["drop"]:
+                        print("\n\n{0} ADICIONADA AO INVENTÁRIO". format(k.upper()))
+                    dinheiro += insb_money
+                    print("BALANÇO DA CARTEIRA: {0} REAIS". format(dinheiro))
+                    inventario.update(monstro["drop"])
+                    insperboys["hp"] = hp_monstro
+                    print(monstro["ok"])
+                    print("[OK]")
+                    escolha = monstro["volta"]
+                    cenario_atual["descricao"]= cenario_atual["segunda"]
+                    cenario_atual["contador"]=1
+                    ok = input(": ")
+                    fight = False
+                    return escolha, dinheiro, hp
+            elif escolha == "fugir":
+                print("\n\n____________\n\n")
+                print("Você não aguentou a briga e resolveu fugir de volta para o saguão!\n\n")
+                print("[OK]")
+                escolha = monstro["volta"]
+                ok = input(": ")
+                fight = False
+                return escolha, dinheiro, hp
+            else:
+                print("\n\nComando inválido")
+                print("\n\n____________")
+            
 
     cenarios, nome_cenario_atual = carregar_cenarios()
 
@@ -103,22 +177,54 @@ def main():
         
     
         opcoes = cenario_atual['opcoes']
-        if len(opcoes) == 0:
-            print("Acabaram-se suas opções! Mwo mwo mwooooo...")
-            game_over = True
-        else:
-
-            # Aluno B: substitua este comentário e a linha abaixo pelo código
-            # para pedir a escolha do usuário.
-            escolha = ""
-
-            if escolha in opcoes:
-                nome_cenario_atual = escolha
+        
+        #display dos cenarios caso vc já tenha visitado a sala
+        if cenario_atual["contador"]==1:
+            print("[OK]")
+            escolha = arruma(input(": "))
+            if escolha == "desistir":
+                print("Você desistiu da sua procura. Uma pena, vai pegar DP em DesSoft")
+                game_over=True
             else:
-                print("Sua indecisão foi sua ruína!")
+                nome_cenario_atual = cenario_atual["volta"]
+                
+                
+        #display dos cenarios normais ou de combate
+        else:
+            for k,v in opcoes.items():
+                print(v)   
+            if len(opcoes) == 0:
+                print("Acabaram-se suas opções! Perdeu playboy...")
                 game_over = True
-
-    print("Você morreu!")
+            else:
+                escolha = arruma(input(": "))
+                if escolha=="desistir":
+                    print("\n\nVocê desistiu da sua procura. Uma pena, vai pegar DP em DesSoft")
+                    game_over=True       
+                elif escolha in opcoes:
+                    if escolha in cenarios: 
+                        nome_cenario_atual = escolha
+                    elif cenario_atual["contador"]==0:
+                        if escolha == "brigar":
+                            escolha, dinheiro, hp =combate(insperboys,hp,dinheiro,armor)
+                            if escolha=="desistir":
+                                game_over=True
+                            else:
+                                nome_cenario_atual = escolha
+                        
+                       
+                            
+                        else:
+                            print("\n\nComando inválido\n")
+                    elif cenario_atual["contador"]==1:
+                        ok = input(": ")
+                        escolha = cenario_atual["volta"]
+                    else:
+                        print("\n\nComando inválido\n")
+                        escolha = arruma(input(": "))
+                   
+                else:
+                    print("\n\nComando inválido")
 
 
 # Programa principal.
