@@ -15,7 +15,9 @@ insperboys = {
                     "Ostentação":10,
                     "Processo":20,
                     "Ameaça":10,
-                    "Baforada na sua cara":15
+                    "Baforada na sua cara":15,
+                    "Trap Music":15,
+                    "Sertanejo":20
                     },
             "dano" : ("\n\nInsper Boys sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"])),
             "hp" : 30,
@@ -37,7 +39,7 @@ humberto = {
             "dano" : ("\n\nHumberto e os ninjas sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"])),
             "hp" : 50,
             "money": random.randint(20,100),
-            "ok" : "\n\nVocê conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\nO Humberto não sabe exatamente onde está o Raul, mas mencionou o Techlab. Talvez você devesse ir lá checar.",
+            "ok" : "\n\nVocê conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\nO Humberto não sabe exatamente onde está o Raul",
             "volta" : "sair da sala"
             }
 
@@ -194,8 +196,21 @@ def main():
                                 game_over=True
                             else:
                                 nome_cenario_atual = escolha
-                        
-                       
+                        elif escolha == "gritar":
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você saiu gritando para saber se alguém viu o Raul mas acabou sendo expulso da biblioteca. Honestamente, você nunca foi numa biblioteca?")
+                                print("\n\n[OK]")
+                                ok = input(": ")
+                                cenario_atual["contador"]=1
+                                cenario_atual["descricao"]=cenario_atual["segunda"]
+                                if escolha=="desistir":
+                                    game_over=True
+                                else:
+                                    nome_cenario_atual = cenario_atual["volta"]
+                        elif escolha=="ver protótipo": 
+                            cenarios["-1"]["contador"]=1
+                            cenarios["4"]["contador"]=1
+                            cenarios["5"]["contador"]=1
                             
                         else:
                             print("\n\nComando inválido\n")
