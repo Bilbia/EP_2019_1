@@ -3,6 +3,21 @@
 # Alunos: 
 # - aluno A: Beatriz Muniz de Castro e Silva, biamcs2000@al.edu.insper.com / biamcs2000@gmail.com
 # - aluno B: Gustavo Pazemeckas, gustavorp3@al.insper.edu.br / gustavo.pazemeckas@gmail.com
+#arruma o input do usuário pra ele poder escrever em qualquer formato (minúsculo ou maiúsculo) e com ou sem acentos
+def arruma(string):     
+    string = string.lower()     #faz todos os caracteres do input minúsculos
+    s = list(string)     #faz uma lista da string para que possamos iterar sobre ela
+    i = 0
+    while i<len(s):
+        if s[i]=="ã":
+            s[i]="a"
+        elif s[i]=="é":
+            s[i]="e"
+        elif s[i]=="ç":
+            s[i]="c"
+        i+=1
+    string = str("".join(s))   
+    return string   #junta todos os caracteres separados novamente em uma palavra só e transforma de novo em uma string
 
 
 def carregar_cenarios():
