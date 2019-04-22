@@ -184,15 +184,6 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                 
     #    função do sistema de compras
     def compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual):
-        for k,v in cenario_atual["produtos"].items():
-                print("{0}: {1}". format(k,v[0]))
-                print("Preço: R${0}\n". format(v[1]))
-        print("\nBALANÇO DA CARTEIRA: {0} REAIS\n\n". format(dinheiro))
-        for k,v in opcoes.items():
-            print(v)
-        
-                
-       
         produtos={
                     "casaco":(20,"armor"),
                     "sacochila":(3,"capacidade"),
@@ -225,6 +216,7 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                 hp+=v[0]
             elif "maxhp" in v:
                 maxhp+=v[0]
+            
         return dinheiro, inventario,armor,capacidade,hp,maxhp
     
     
@@ -345,7 +337,13 @@ if __name__ == "__main__":
     print("\n\nMassa. Mas voltando agora pra todo aquele negócio de ter que encontrar o Raul:\n\n")
     print("[OK]")
     ok = input(": ")
-    main()
+    hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual = main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
     with open('Binha_Noza.txt','r') as arquivo:
        conteudo = arquivo.read()
        print (conteudo)
+       if hp<=0:
+           print("\n\nCaso você se lembre do nome de uma sala, você pode se teleportar pra ela para voltar ao jogo\n\n")
+           escolha=arruma(input(": "))
+           if escolha in cenarios:
+               nome_cenario_atual = escolha
+               main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
