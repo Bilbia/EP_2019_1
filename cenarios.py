@@ -94,14 +94,14 @@ cenarios = {
             },
     "-1":{
         "titulo": "Primeiro Subsolo",
-        "descricao": "Você desceu para o primeiro subsolo. Não sei a probabilidade, mas talvez o Raul esteja no Techlab. caraca",
+        "descricao": "Você desceu para o primeiro subsolo. Não sei a probabilidade, mas talvez o Raul esteja no Techlab.",
         "opcoes": {
                 "techlab": "[TECHLAB]",
                 "elevadores": "[ELEVADORES]"
                 },
         "contador":0
             },
-    "4 andar":{
+    "4":{
         "titulo": "Quarto Andar",
         "descricao": "Você desceu no quarto andar",
         "opcoes": {

@@ -4,6 +4,7 @@
 # - aluno A: Beatriz Muniz de Castro e Silva, biamcs2000@al.edu.insper.com / biamcs2000@gmail.com
 # - aluno B: Gustavo Pazemeckas, gustavorp3@al.insper.edu.br / gustavo.pazemeckas@gmail.com
 import random
+import json
 
 ##as funcões ok e algumas funções escolha são vazias para receber um input qualquer do usuário e agir como um "ok" -> próxima cena
 
@@ -19,7 +20,6 @@ insperboys = {
                     "Trap Music":15,
                     "Sertanejo":20
                     },
-            "dano" : ("\n\nInsper Boys sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"])),
             "hp" : 30,
             "drop" : {"Vape Pen":20},
             "money": random.randint(20,100),
@@ -36,7 +36,6 @@ humberto = {
                     "Shuriken":15,
                     "Provas passadas":15
                     },
-            "dano" : ("\n\nHumberto e os ninjas sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"])),
             "hp" : 50,
             "money": random.randint(20,100),
             "ok" : "\n\nVocê conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\nO Humberto não sabe exatamente onde está o Raul",
@@ -81,12 +80,19 @@ def main():
     #    função de combate
     def combate(monstro,hp,dinheiro,armor):
         hp_monstro = monstro["hp"]      #transforma o hp do monstro em uma variável para que possa ser calculada
+        monstro_money = monstro["money"]
+        
         
         #dados do insperboys que precisam ser adicionados dentro da funcão
-        insb_money = random.randint(20,100)
-        insperboys["end"]= "Parabéns! Você derrotou os Insperboys!\n\n\nNa correria para pedir um Uber para fugir, eles acabaram deixando cair a vape pen deles e {0} reais. Bem, achado não é roubado.". format(insb_money)
+        insperboys["end"]= "Parabéns! Você derrotou os Insperboys!\n\n\nNa correria para pedir um Uber para fugir, eles acabaram deixando cair a vape pen deles e {0} reais. Bem, achado não é roubado.". format(monstro_money)
         insperboys["vida"]=("\n\nHP InsperBoys: {0}". format(hp_monstro))
         insperboys["atplayer"]=("{0} atacou os Insper Boys com seu guarda chuva de {1}!". format(nome,tema_umb))
+        insperboys["dano"]=("\n\nInsper Boys sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"]))
+        
+        
+        #dados do humberto e ninjas que precisam ser adicionados dentro da função
+        
+        
         
         print("\n\n____________\n\n")
         print (monstro["start"])
@@ -124,7 +130,7 @@ def main():
                     print(monstro["end"])
                     for k in monstro["drop"]:
                         print("\n\n{0} ADICIONADA AO INVENTÁRIO". format(k.upper()))
-                    dinheiro += insb_money
+                    dinheiro += monstro_money
                     print("BALANÇO DA CARTEIRA: {0} REAIS". format(dinheiro))
                     inventario.update(monstro["drop"])
                     insperboys["hp"] = hp_monstro
@@ -148,6 +154,8 @@ def main():
                 print("\n\nComando inválido")
                 print("\n\n____________")
                 
+                
+                
     #    função do sistema de compras
     def compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual):
         for k,v in cenario_atual["produtos"].items():
@@ -156,21 +164,9 @@ def main():
         print("\nBALANÇO DA CARTEIRA: {0} REAIS\n\n". format(dinheiro))
         for k,v in opcoes.items():
             print(v)
-        escolha = arruma(input(": "))
-        if escolha in opcoes:
-            if escolha in cenarios: 
-                nome_cenario_atual = escolha
-            elif cenario_atual["contador"]==1:
-                ok = input(": ")
-                escolha = cenario_atual["volta"]
-            elif cenario_atual["contador"]==2:
-               dinheiro, inventario, armor, capacidade,hp,maxhp = compra(dinheiro,inventario,armor,capacidade,hp,maxhp)
+        
                 
-            else:
-                print("\n\nComando inválido\n")
-                escolha = arruma(input(": "))
-        else:
-            print("\n\nComando inválido")
+       
         produtos={
                     "casaco":(20,"armor"),
                     "sacochila":(3,"capacidade"),
@@ -203,8 +199,10 @@ def main():
                 hp+=v[0]
             elif "maxhp" in v:
                 maxhp+=v[0]
-            
-        return dinheiro, inventario,armor,capacidade,hp,maxhp,nome_cenario_atual
+        return dinheiro, inventario,armor,capacidade,hp,maxhp
+    
+    
+    
             
 
     cenarios, nome_cenario_atual = carregar_cenarios()
@@ -232,8 +230,16 @@ def main():
                 nome_cenario_atual = cenario_atual["volta"]
                 
                 
-        #display dos cenarios normais ou de combate
+
+                
+                
+        #pede escolha e faz display no resto dos tipos de sala
         else:
+            if cenario_atual["contador"]==2:
+                for k,v in cenario_atual["produtos"].items():
+                    print("{0}: {1}". format(k,v[0]))
+                    print("Preço: R${0}\n". format(v[1]))
+                print("\nBALANÇO DA CARTEIRA: {0} REAIS\n\n\n". format(dinheiro))
             for k,v in opcoes.items():
                 print(v)   
             if len(opcoes) == 0:
@@ -275,6 +281,8 @@ def main():
                     elif cenario_atual["contador"]==1:
                         ok = input(": ")
                         escolha = cenario_atual["volta"]
+                    elif cenario_atual["contador"]==2:
+                       dinheiro, inventario, armor, capacidade,hp,maxhp = compra(dinheiro,inventario,armor,capacidade,hp,maxhp,cenario_atual)
                     else:
                         print("\n\nComando inválido\n")
                         escolha = arruma(input(": "))
