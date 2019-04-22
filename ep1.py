@@ -43,44 +43,12 @@ def arruma(string):
 
 #carrega os cenarios
 def carregar_cenarios():
-    cenarios = {
-        "saguao": {
-                "titulo": "Saguão do Insper",
-                "descricao": "Você está no saguão do Insper. À sua frente, as catracas se colocam entre você e o Insper em si. À sua esquerda, integrantes do DA estão vendendo diversos objetos temáticos da facool. Atrás de você, as portas levam para o fumódromo.",
-                "opcoes": {
-                    "catracas" : "[CATRACAS]",
-                    "stand do da": "[STAND DO DA]",
-                    "sair": "[SAIR]"
-                },
-                "contador":0
-            },
-            "sair": {
-                "titulo": "Fumódromo",
-                "descricao": "Você entra no fumódromo. À sua volta, deveros Insper Boys fumam seus vapes e cigarros, mas você não vê o Raul em lugar nenhum.\n\nComo assim?! Os Insper Boys estão zuando o seu guarda chuva de {0}! Você pode atacá-los para defender sua dignidade ou voltar para o saguão e continuar procurando o Raul.". format(tema_umb),
-                "opcoes": {
-                    "saguao": "[SAGUÃO]",
-                    "brigar": "[BRIGAR]"
-                },
-                "segunda":"Você entra no fumódromo. Os Insper Boys não estão em nenhum lugar à vista. Devem ter ido para a Villa Mix.",
-                "opcoes2": {
-                        "saguao": "[SAGUÃO]",
-                        },
-                "volta":"saguao",
-                "contador":0
-            },
-            "stand do da": {
-                "titulo": "Stand do DA",
-                "descricao": "Você se aproxima do stand do DA. Eles estão vendendo uma pletora de produtos temáticos da sua querida faculdade.",
-                "opcoes": {
-                    "comprar casaco": "[COMPRAR CASACO]",
-                    "comprar sacochila":"[COMPRAR SACOCHILA]",
-                    "comprar canecao":"[COMPRAR CANECÃO]",
-                    "saguao":"[SAGUÃO]"
-                    }
-            }
-        }
-    nome_cenario_atual = "saguao"
-    return cenarios, nome_cenario_atual
+    with open('cenarios.txt','r') as arquivo:
+       conteudo = arquivo.read()
+       cenarios= json.loads(conteudo)
+       nome_cenario_atual = "saguao"
+       return cenarios, nome_cenario_atual
+
 
 
 def main():
