@@ -219,7 +219,55 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
             
         return dinheiro, inventario,armor,capacidade,hp,maxhp
     
+    def heal(hp,maxhp,inventario):
+        if hp<maxhp:
+            hp+=20
+            if hp>maxhp:
+                hp = maxhp
+            print("Você bebeu água e restaurou 20 HP\n")
+            print ("HP de {0}: {1}\n\n[OK]". format(nome,hp))
+            ok = input(": ")
+        else:
+            print("\n\n____________\n\n\nA sua vida já está no máximo\n\n\n[OK]")
+            ok=input(": ")
+        return hp, maxhp, inventario
     
+    def heal_caneca(hp,maxhp,inventario):
+        if "canecao" in inventario: 
+            for k,v in inventario.items():
+                if k=="canecao":
+                    if "cheio" in v:
+                        inventario["canecao"] = "vazio"
+                        print("Você bebeu água e restaurou 20 HP\n\n[OK]")
+                        ok=input(": ")
+                        if hp<maxhp:
+                            hp+=20
+                            if hp>maxhp:
+                                hp = maxhp
+                            print("\n\n____________\n\n\nVocê bebeu água e restaurou 20 HP") 
+                            print ("HP de {0}: {1}". format(nome,hp))
+                    else:
+                        
+                        print("\n\n____________\n\n\nO seu canecão está vazio\n\n[OK]")
+                        ok=input(": ")
+        else:
+            print("\n\n____________\n\n\nVocê não tem um canecão\n\n[OK]")
+            ok=input(": ")
+#        print ("HP de {0}: {1}". format(nome,hp))
+        return hp, maxhp, inventario
+    
+    
+    def encher(inventario):
+        for k,v in inventario.items():
+            if k=="canecao":
+                if "vazio" in v:
+                    inventario["canecao"] = "cheio"
+                    print("\n\n____________\n\n\nVocê encheu o seu Canecão.\n\n\n[OK]")
+                    ok=input(": ")
+                else:
+                    print("\n\n____________\n\n\nO seu Canecão já está cheio.\n\n\n[OK]")
+                    ok=input(": ")
+        return inventario
     
             
 
