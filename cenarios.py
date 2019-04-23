@@ -19,15 +19,12 @@ cenarios = {
     },
     "sair": {
         "titulo": "Fumódromo",
-        "descricao": "Você entra no fumódromo. À sua volta, deveros Insper Boys fumam seus vapes e cigarros, mas você não vê o Raul em lugar nenhum.\n\nComo assim?! Os Insper Boys estão zuando o seu guarda chuva de {0}! Você pode atacá-los para defender sua dignidade ou voltar para o saguão e continuar procurando o Raul.". format(tema_umb),
+        "descricao": ("Você entra no fumódromo. À sua volta, deveros Insper Boys fumam seus vapes e cigarros, mas você não vê o Raul em lugar nenhum.\n\nComo assim?! Os Insper Boys estão zuando o seu guarda chuva de ",tema_umb,"! Você pode atacá-los para defender sua dignidade ou voltar para o saguão e continuar procurando o Raul."),
         "opcoes": {
-            "saguao": "[SAGUÃO]",
+            "voltar": "[VOLTAR]",
             "batalhar": "[BATALHAR]"
         },
         "segunda":"Você entra no fumódromo. Os Insper Boys não estão em nenhum lugar à vista. Devem ter ido para a Villa Mix.",
-        "opcoes2": {
-                "saguao": "[SAGUÃO]",
-                },
         "volta":"saguao",
         "contador":0,
         "monstro": "insperboys",
@@ -66,29 +63,39 @@ cenarios = {
         "opcoes": {
                 "gritar":"[GRITAR]",
                 "atendimento":"[ATENDIMENTO]",
-                "catracas": "[CATRACAS]"
+                "voltar": "[VOLTAR]"
                 },
         "contador": 0,
         "volta": "catracas",
-        "segunda":"Você foi expulso da biblioteca, não deve ser uma boa ideia tentar entrar de novo"
+        "segunda":"Você foi expulso da biblioteca, não deve ser uma boa ideia tentar entrar de novo."
             },
     "atendimento":{
-        "descricao": "Você se aproxima do balcão de atendimento. Talvez o Raul tenha passado aqui mais cedo.",
+        "descricao": "Você se aproxima do balcão de atendimento.",
         "opcoes": {
-                "perguntar":"[PERGUNTAR]",
                 "alugar livro":"[ALUGAR LIVRO]",
                 "voltar": "[VOLTAR]"
                 },
         "contador": 0,
         "volta": "terreo",
-        "segunda":"Você foi expulso da biblioteca, não deve ser uma boa ideia tentar entrar de novo"
+        "segunda":"Você foi expulso da biblioteca, não deve ser uma boa ideia tentar entrar de novo."
+            },
+    "alugar livro":{
+        "descricao": "As atendentes lhe oferecem 3 livros para alugar. Qual você quer alugar?",
+        "opcoes": {
+                "livro de python":"[LIVRO DE PYTHON]",
+                "livro do golem":"[LIVRO DO GOLEM]",
+                "livro de engineering design":"[LIVRO DE ENGINEERING DESIGN]",
+                "voltar": "[VOLTAR]"
+                },
+        "contador": 0,
+        "volta": "terreo",
+        "segunda":"Você já alugou um livro."
             },
     "elevadores":{
         "titulo": "Elevadores",
         "descricao": "Você está num elevador. Qual botão deseja apertar?",
         "opcoes": {
                 "terreo": "[TERREO]",
-                "1 subsolo": "[1 SUBSOLO]",
                 "4 andar": "[4 ANDAR]",
                 "5 andar": "[5 ANDAR]"
                 },
@@ -130,21 +137,20 @@ cenarios = {
         "opcoes": {
                 "beber": "[BEBER]",
                 "encher canecao": "[ENCHER CANECÃO]",
-                "4 andar": "[4 ANDAR]",
+                "elevadores": "[ELEVADORES]",
                 },
         "contador":0
-            },
+            },            
     "sala 405": {
         "titulo": "Sala 405",
         "descricao": "Você entrou na sala de DesSoft. Curiosamente, o único professor que está na sala é o Humberto e os ninjas.",
         "opcoes": {
                 "perguntar do raul": "[PERGUNTAR DO RAUL]",
-                "sair da sala": "[SAIR DA SALA]"
+                "voltar": "[VOLTAR]"
                 },
         "contador": 0,
         "segunda": "Você entrou na sala de DesSoft. Ela está vazia",
         "volta": "sair da sala"
-        
             },
     "perguntar do raul": {
         "titulo" : "",
@@ -164,6 +170,7 @@ cenarios = {
         "opcoes": {
                 "sala 405": "[SALA 405]",
                 "jogar mario kart": "[JOGAR MARIO KART]",
+                "bebedouro": "[BEBEDOURO]",
                 "elevadores": "[ELEVADORES]"
                 },
         "contador":0
@@ -176,22 +183,38 @@ cenarios = {
                 "bebedouro": "[BEBEDOURO]",
                 "elevadores": "[ELEVADORES]"
                 },
-        "contador": 0
+        "contador": 0,
             },
+    "procurar raul": {
+        "titulo": "Refeitório",
+        "descricao": "Você entra no refeitório, mas o único professor que você vê é o Fernando. Talvez ele saiba algo.",
+        "opcoes": {
+            "voltar": "[VOLTAR]",
+            "batalhar": "[BATALHAR]"
+        },
+        "segunda":"Você entra no refeitório, mas as únicas pessoas presentes nesse horário são os funcionários.",
+        "volta":"5 andar",
+        "contador":0,
+        "monstro": "fernando",
+        "add":"procurar raul"
+    },
     "techlab": {
         "titulo": "Techlab",
-        "descricao": "Você entrou no techlab. Raul não está aqui, mas você vê um protótipo de um aluno brilhando no canto.",
+        "descricao": "Você entrou no Techlab. Raul não está aqui, mas você vê um protótipo de um aluno brilhando no canto.",
         "opcoes": {
-                "ver protótipo":"[VER PROTÓTIPO]",
+                "ver prototipo":"[VER PROTÓTIPO]",
                 "elevadores": "[ELEVADORES]"
                 },
-        "contador": 0
+        "contador": 0,
+        "segunda": "Você está de volta ao Techlab. Tudo parece ter voltado ao normal, mas você vê uma fumaça saindo do protótipo.\n\n\nNum canto, um computador mostra a data:\n\n\n22 de abril de 2019! Ufa! Realmente estamos de volta. Agora, vamos achar o Raul."
             },
     "ver protótipo": {
-        "descricao": "Você se aproxima do protótipo lentamente.\n\nPuts! Você tropeça numa peça no chão e começa a cair na direção do protótipo!\n\n*CRASH*",
+        "descricao": "Você cai direto no chão. Ué, você não estava caindo de cara no protótipo?\n\n\nVocê olha em volta. Você não está no Techlab! À sua volta, carros estão estacionados no estacionamento, nehuma máquina a vista.",
         "opcoes": {
-                "procurar raul": "[PROCURAR RAUL]"
-                }
+                "elevadores": "[ELEVADORES]"
+                },
+        "contador":0
+        
             }
   }
 import json

@@ -38,9 +38,26 @@ monstros = {
                         "Shuriken":15,
                         "Provas passadas":15
                         },
-                "hp" : 50,
+                "hp" : 120,
                 "money": random.randint(20,100),
-                "ok" : "\n\nVocê conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\nO Humberto não sabe exatamente onde está o Raul",
+                "ok" : "\n\nPercebendo que agora é horário de atendimento em outra sala, Humberto e os Ninjas vão embora com pressa.",
+                "volta" : "sair da sala"
+                },
+    "fernando" : {
+                "nome": "Fernando",
+                "start" : "O Fernando está chocado que você desafiou ele, mas ele não foge da luta. Atrás dele, os ninjas também se juntam à luta.",
+                "ataques" : {
+                        "Paradigma":30,
+                        "APS":40,
+                        "Capital Científico":10,
+                        "Humanas":15,
+                        "Prova sem consulta":15,
+                        "Case": 15
+                        },
+                "hp" : 60,
+                "money": random.randint(20,100),
+                "ok" : "\n\nO Fernando está bem alterado devido à algo que ele fumou no fumódromo com os Insper Boys, e não pode te ajudar mais. Ele vai pro fumódromo fumar mais.",
+                "drop": {"Óculos do Fernando":10},
                 "volta" : "sair da sala"
                 }
         }
@@ -73,7 +90,7 @@ def carregar_cenarios():
 
 
 #coisas que o usuário começa com:
-inventario = {"Armas": {"Guarda Chuva": 15}, "Armaduras":{}}
+inventario = {"armas": {"guarda chuva": 15}, "armaduras":{}}
 dinheiro = 120
 hp = 50
 maxhp = 50
@@ -87,7 +104,7 @@ cenarios, nome_cenario_atual = carregar_cenarios()      #permite que o usuário 
 #função principal
 def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual):
     
-    
+    tamanho_inv = len(inventario)+len(inventario["armas"])+len(inventario["armaduras"])-2
     hp=maxhp        #permite que o jogador tenha vida após voltar da morte
     
     
@@ -101,14 +118,19 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
         monstros["insperboys"]["end"]= "Parabéns! Você derrotou os Insperboys!\n\n\nNa correria para pedir um Uber para fugir, eles acabaram deixando cair a vape pen deles e {0} reais. Bem, achado não é roubado.". format(monstro_money)
         monstros["insperboys"]["vida"]=("\n\nHP InsperBoys: {0}". format(hp_monstro))
         monstros["insperboys"]["atplayer"]=("{0} atacou os Insper Boys com seu guarda chuva de {1}!". format(nome,tema_umb))
-        monstros["insperboys"]["dano"]=("\n\nInsper Boys sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"]))
+        monstros["insperboys"]["dano"]=("\n\nInsper Boys sofreram {0} de dano.\n\n". format(inventario["armas"]["guarda chuva"]))
         
         #dados do humberto e ninjas que precisam ser adicionados dentro da função
         monstros["humberto"]["end"]= "Você conseguiu derrotar o Humberto e os Ninjas de DesSoft!\n\n\nO Humberto não sabe exatamente onde está o Raul, mas ele mencionou algo sobre o Techlab. Talvez valha a pena checar.\n\nAlém da pista, eles também deixaram cair {0} reais enquanto saiam da sala.\n\n". format(monstro_money)
         monstros["humberto"]["vida"]=("\n\nHP do Humberto e dos Ninjas: {0}". format(hp_monstro))
         monstros["humberto"]["atplayer"]=("{0} atacou o Humberto e os Ninjas com seu guarda chuva de {1}!". format(nome,tema_umb))
-        monstros["humberto"]["dano"]=("\n\nHumberto e os Ninjas sofreram {0} de dano.\n\n". format(inventario["Armas"]["Guarda Chuva"]))
+        monstros["humberto"]["dano"]=("\n\nHumberto e os Ninjas sofreram {0} de dano.\n\n". format(inventario["armas"]["guarda chuva"]))
         
+        #dados do humberto e ninjas que precisam ser adicionados dentro da função
+        monstros["fernando"]["end"]= "Você conseguiu derrotar o Fernando!\n\n\nEle lhe dá os óculos dele em reconhecimento do seu Capital de Luta superior. Esse item aumenta a sua armadura em 10. Além disso ele te dá {0} pelo esforço.". format(monstro_money)
+        monstros["fernando"]["vida"]=("\n\nHP do Fernando: {0}". format(hp_monstro))
+        monstros["fernando"]["atplayer"]=("{0} atacou o Fernando com seu guarda chuva de {1}!". format(nome,tema_umb))
+        monstros["fernando"]["dano"]=("\n\nFernando sofreu {0} de dano.\n\n". format(inventario["armas"]["guarda chuva"]))
         
         print("\n\n____________\n\n")
         print (monstro["start"])
@@ -138,13 +160,14 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                  print("\n\n____________\n\n")
                  print(monstro["atplayer"])
                  print(monstro["dano"])
-                 hp_monstro-= inventario["Armas"]["Guarda Chuva"]
+                 hp_monstro-= inventario["armas"]["guarda chuva"]
                  if hp_monstro>0:
                     ataque = random.choice(list(monstro["ataques"]))
                     
                     #frase de contra-ataque baseada no ataque escolhido
                     monstros["insperboys"]["back"]=("Os Insper Boys atacaram de volta com {0}.". format(ataque))
                     monstros["humberto"]["back"]=("Humberto e os Ninjas atacaram de volta com {0}.". format(ataque))
+                    monstros["fernando"]["back"]=("Fernando atacou de volta com {0}.". format(ataque))
                     
                     print(monstro["back"], "\n\n")
                     print("{0} sofreu {1} de dano.". format(nome,int(monstro["ataques"][ataque]*(1-armor/100))))      #quanto de dano o jogador recebeu
@@ -181,9 +204,8 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                 print("\n\nComando inválido")
                 print("\n\n____________")
                 
-                
     #    função do sistema de compras
-    def compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual):
+    def compra(dinheiro, inventario,armor,capacidade,hp,maxhp,cenario_atual,cenarios):
         produtos={
                     "casaco":(20,"armor"),
                     "sacochila":(3,"capacidade"),
@@ -258,15 +280,19 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
     
     
     def encher(inventario):
-        for k,v in inventario.items():
-            if k=="canecao":
-                if "vazio" in v:
-                    inventario["canecao"] = "cheio"
-                    print("\n\n____________\n\n\nVocê encheu o seu Canecão.\n\n\n[OK]")
-                    ok=input(": ")
-                else:
-                    print("\n\n____________\n\n\nO seu Canecão já está cheio.\n\n\n[OK]")
-                    ok=input(": ")
+        if "canecao" in inventario:
+            for k,v in inventario.items():
+                if k=="canecao":
+                    if "vazio" in v:
+                        inventario["canecao"] = "cheio"
+                        print("\n\n____________\n\n\nVocê encheu o seu Canecão.\n\n\n[OK]")
+                        ok=input(": ")
+                    else:
+                        print("\n\n____________\n\n\nO seu Canecão já está cheio.\n\n\n[OK]")
+                        ok=input(": ")
+        else: 
+            print("n\n____________\n\n\nVocê não tem um Canecão.\n\n\n[OK]")
+            ok=input(": ")
         return inventario
     
 
@@ -286,7 +312,21 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
             print(cenario_atual["descricao"])
             print("\n\n")
         
-    
+        if "óculos do fernando" in inventario:
+            inventario["armaduras"]["oculos do fernando"]=inventario["óculos do fernando"]
+            del inventario["óculos do fernando"]
+            armor+=10
+        
+        if monstros["humberto"]["hp"]<=0:
+            cenarios["elevadores"]["opcoes"]["1 subsolo"]="[1 SUBSOLO]"
+        
+        if "Vape Pen" in inventario: 
+            inventario["armaduras"]["vape pen"]=inventario["Vape Pen"]
+            armor+=20
+            
+            
+
+
         opcoes = cenario_atual['opcoes']
         
         #display dos cenarios caso vc já tenha visitado a sala
@@ -299,7 +339,7 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                 return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
             else:
                 nome_cenario_atual = cenario_atual["volta"]
-                
+               
                 
 
                 
@@ -321,7 +361,7 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                 if escolha=="desistir":
                     print("\n\nVocê desistiu da sua procura. Uma pena, vai pegar DP em DesSoft\n\n")
                     game_over=True
-                    return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                    return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual,escolha
                 elif escolha=="usar canecao":
                     hp, maxhp, inventario = heal_caneca(hp, maxhp, inventario)
                     
@@ -337,9 +377,9 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                                 escolha, dinheiro, hp =combate(monstro,hp,dinheiro,armor)
                             if escolha=="desistir":
                                 game_over=True
-                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual,escolha
                             elif hp<=0:
-                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
+                                return hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual,escolha
                                 game_over=True
                             else:
                                 nome_cenario_atual = escolha
@@ -355,15 +395,242 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                                 hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual
                             else:
                                 nome_cenario_atual = cenario_atual["volta"]
-                        elif escolha=="ver protótipo": 
-                            cenarios["-1"]["contador"]=1
-                            cenarios["4"]["contador"]=1
-                            cenarios["5"]["contador"]=1
+                                
+                                
+                                
+                                
+                        #prototipo
+                        elif escolha=="ver prototipo":
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você se aproxima do protótipo lentamente.\n\nPuts! Você tropeça numa peça no chão e começa a cair na direção do protótipo!\n\n*CRASH*\n\n\n[OK]")
+                            ok=input(": ")
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você cai direto no chão. Ué, você não estava caindo de cara no protótipo?\n\n\nVocê olha em volta. Você não está no Techlab! À sua volta, carros estão estacionados no estacionamento, nehuma máquina a vista. No seu lado, o protótipo se mescla ao resto das máquinas, mas quando vc toca nele, nada acontece. \n\n\n[ONDE ESTOU?]")
+                            ok=input(": ")
+                            while True:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você sobe até o térreo e vê o que parece o Insper, mas quase 10 anos atrás! O que deseja fazer?\n\n\n[SURTAR]\n[CHECAR O 4 ANDAR]")
+                                escolha=arruma(input(": "))
+                                if escolha=="surtar":
+                                     print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                     print("Você entrou em pânico e soltou um grito de desespero no meio da entrada. Os alunos já estão acostumados. Ninguém sequer vira pra você.\n\n\n[OK]")
+                                     ok=input(": ")
+                                if escolha=="checar o 4 andar":
+                                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                    print("Você resolve subir pra checar o 4 andar. Cadê os contâineres? Foram todos trocados por salas de aula como nos outros andares!\n\n\nVocê olha num jornal em cima de um pequeno stand e lê a data:\n\n\n22 de abril de 2006!\n\n\n[OK]")
+                                    ok=input(": ")
+                                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                    print("Enquanto você está suave surtando num canto, você sente alguém trombando em você.\n\n\n'Me desculpe! não estava prestando atenção!'\n\n\n[OK]")
+                                    ok=input(": ")
+                                    while True:
+                                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                        print("Você olha com surpresa: o Raul é cabeludo!\n\n\n'Posso lhe ajudar?' ele pergunta.\n\n\n[SURTAR]\n[LAVAGEM CEREBRAL]")
+                                        escolha=arruma(input(": "))
+                                        if escolha=="surtar":
+                                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                            print("Você começa a surtar e falar muito rápido, mas o Raul não entende nada e pede para você se acalmar.\n\n\n[OK]")
+                                            ok=input(": ")
+                                        if escolha=="lavagem cerebral":
+                                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                            print("Você se aproxima da Raul e sussurra:\n\n\n'Se liga aqui Raul. No futuro, essa universidade vai ter um departamento de engenharia, e você vai ser professor de programação pro 1 semestre. Algum dia, uma pessoa chamada {0} vai lhe pedir pra você adiar a EP dela, e caso você não fizer isso, eu vou achar você e vou te matricular no curso de InstruMed. Acredite, você não quer isso'". format(nome))
+                                            print("\n\nRaul olha pra você com medo. Ele acena a cabeça e sai de fininho\n\n\n[OK]")
+                                            ok=input(": ")
+                                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                            print("Depois de falar com o Raul, você volta para o estacionamento e encontra o protótipo brilhando novamente, iluminando o lugar. Sem pensar duas vezes, você corre em direção à ele e estende a sua mão.\n\n\n. . .\n\n\n[OK]")
+                                            ok=input(": ")
+                                            break
+                                        else:
+                                            print("\n\nComando inválido\n")
+                                    break
+                                else:
+                                    print("\n\nComando inválido\n")
+                                
+                            nome_cenario_atual = "techlab"
+                            cenarios["techlab"]["descricao"]= cenarios["techlab"]["segunda"]
+                            del cenarios["techlab"]["opcoes"]["ver prototipo"]
+                            cenarios["elevadores"]["opcoes"]["6 andar"]="[6 ANDAR]"
+                            
+                        elif escolha=="6 andar":
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você se encontra no 6 andar. Numa mesa perto de você, o Raul está programando no seu laptop.\n\n\n[FALAR COM ELE]\n\n\n")
+                            ok=input(": ")
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você chega perto o suficiente do Raul para que ele possa lhe ouvir.\n\n\n'Boa tarde Raul, posso falar com você? Eu preciso de um adiamento da EP' \n\n\nO Raul levanta os olhos do computador, e quando ele vê que é você falando, seus olhos brilham com reconhecimento e medo\n\n\n'Mas é claro, {0}. Pode me entregar no final da semana.'\n\n\nVocê vai embora, comemorando a sua vitória e o tempo extra de procastinação.\n\n\n[FIM]")
+                            ok=input(": ")
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("PARABÉNS, VOCÊ CONSEGUIU ADIAR A SUA EP E GANHOU O JOGO! AGORA VAI LÁ FAZER O TRABALHO DE MODSIM")
+                            game_over= True
+                            
+                            
+                            
+                                    
+                                    
+                                    
+                                    
+        
+                                
+                      
+                            
+                            
                         elif escolha=="beber":
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
                             hp, maxhp, inventario = heal(hp, maxhp, inventario)
                             print ("HP de {0}: {1}". format(nome,hp))
                         elif escolha=="encher canecao":
                             inventario = encher(inventario)
+                        elif escolha=="voltar":
+                            nome_cenario_atual=cenario_atual["volta"]
+                            
+                            
+                        elif escolha=="livro de python":
+                            if tamanho_inv<capacidade:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você alugou o livro de Python. Isso lhe promove um aumento no seu dano de 20%.\n\n[OK]")
+                                inventario["livro de python"]=0.2
+                                inventario["armas"]["guarda chuva"]=int(inventario["armas"]["guarda chuva"]*(1+inventario["livro de python"]))
+                                ok=input(": ")
+                                cenarios["alugar livro"]["contador"]=1
+                                nome_cenario_atual=cenario_atual["volta"]
+                                cenarios["alugar livro"]["descricao"]=cenarios["alugar livro"]["segunda"]
+                            else:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você não tem espaço no seu inventário. Deseja retirar algo?")
+                                escolha=arruma(input(": "))
+                                if escolha=="sim":
+                                    while True:
+                                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                        print("Escolha um item para retirar:\n\n")
+                                        for k in inventario:
+                                            if k not in ("armas", "armaduras"):
+                                                print (k.upper())
+                                            if k in ("armas", "armaduras"):
+                                                for a in inventario[k]:
+                                                    print (a.upper())
+                                        escolha=arruma(input("\n\n: "))
+                                        if escolha in inventario:
+                                            if escolha in inventario["armas"] or escolha in inventario["armaduras"]:
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você não pode remover esse item.\n\n\n[OK]")
+                                                ok=input(": ")
+                                            else: 
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você retirou {0} do seu inventário e pegou o livro de Python. Isso lhe promove um aumento no seu dano de 20%\n\n\n[OK]". format(escolha))
+                                                del inventario["{0}". format(escolha)]
+                                                inventario["livro de python"]=0.2
+                                                ok=input(": ")
+                                                cenarios["alugar livro"]["contador"]==1
+                                                nome_cenario_atual=cenario_atual["volta"]
+                                                break
+                                else:
+                                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                    print("Você resolveu não alugar nenhum livro.\n\n\n[OK]")
+                                    ok = input(": ")
+                                    nome_cenario_atual=cenario_atual["volta"]
+                                    
+                                    
+                        elif escolha=="livro do golem":
+                            if tamanho_inv<capacidade:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você alugou o livro do Golem. Isso permite que você cancele a APS do Fernando.\n\n[OK]")
+                                inventario["livro do golem"]="sem aps"
+                                del monstros["fernando"]["ataques"]["APS"]
+                                ok=input(": ")
+                                cenarios["alugar livro"]["contador"]=1
+                                nome_cenario_atual=cenario_atual["volta"]
+                                cenarios["alugar livro"]["descricao"]=cenarios["alugar livro"]["segunda"]
+                            else:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você não tem espaço no seu inventário. Deseja retirar algo?")
+                                escolha=arruma(input(": "))
+                                if escolha=="sim":
+                                    while True:
+                                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                        print("Escolha um item para retirar:\n\n")
+                                        for k in inventario:
+                                            if k not in ("armas", "armaduras"):
+                                                print (k.upper())
+                                            if k in ("armas", "armaduras"):
+                                                for a in inventario[k]:
+                                                    print (a.upper())
+                                        escolha=arruma(input("\n\n: "))
+                                        if escolha in inventario:
+                                            if escolha in inventario["armas"] or escolha in inventario["armaduras"]:
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você não pode remover esse item.\n\n\n[OK]")
+                                                ok=input(": ")
+                                            else: 
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você retirou {0} do seu inventário e pegou o livro do Golem. Isse livro cancela a APS do Fernando.". format(escolha))
+                                                del inventario["{0}". format(escolha)]
+                                                del monstros["fernando"]["ataques"]["APS"]
+                                                inventario["livro do golem"]="sem aps"
+                                                ok=input(": ")
+                                                cenarios["alugar livro"]["contador"]==1
+                                                nome_cenario_atual=cenario_atual["volta"]
+                                                break
+                                else:
+                                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                    print("Você resolveu não alugar nenhum livro.\n\n\n[OK]")
+                                    ok = input(": ")
+                                    nome_cenario_atual=cenario_atual["volta"]
+                                    
+                                    
+                        elif escolha=="livro de engineering design":
+                            if tamanho_inv<capacidade:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você alugou o livro de Engineering Design. Com esses novos conhecimentos, você é capaz de fazer um upgrade no seu Guarda Chuva, aumentando o seu dano em 8.\n\n\n[OK]")
+                                inventario["livro de engineering design"]=8
+                                inventario["armas"]["guarda chuva"]=int(inventario["armas"]["guarda chuva"]+8)
+                                ok=input(": ")
+                                cenarios["alugar livro"]["contador"]=1
+                                nome_cenario_atual=cenario_atual["volta"]
+                                cenarios["alugar livro"]["descricao"]=cenarios["alugar livro"]["segunda"]
+                            else:
+                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                print("Você não tem espaço no seu inventário. Deseja retirar algo?")
+                                escolha=arruma(input(": "))
+                                if escolha=="sim":
+                                    while True:
+                                        print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                        print("Escolha um item para retirar:\n\n")
+                                        for k in inventario:
+                                            if k not in ("armas", "armaduras"):
+                                                print (k.upper())
+                                            if k in ("armas", "armaduras"):
+                                                for a in inventario[k]:
+                                                    print (a.upper())
+                                        escolha=arruma(input("\n\n: "))
+                                        if escolha in inventario:
+                                            if escolha in inventario["armas"] or escolha in inventario["armaduras"]:
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você não pode remover esse item.\n\n\n[OK]")
+                                                ok=input(": ")
+                                            else: 
+                                                print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                                print("Você retirou {0} do seu inventário e pegou o livro de Engineering Design. Com esses novos conhecimentos, você é capaz de fazer um upgrade no seu Guarda Chuva, aumentando o seu dano em 8.". format(escolha))
+                                                del inventario["{0}". format(escolha)]
+                                                inventario["armas"]["guarda chuva"]=int(inventario["armas"]["guarda chuva"]+8)
+                                                inventario["livro de engineering design"]=8
+                                                ok=input(": ")
+                                                cenarios["alugar livro"]["contador"]==1
+                                                nome_cenario_atual=cenario_atual["volta"]
+                                                break
+                                else:
+                                    print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                                    print("Você resolveu não alugar nenhum livro.\n\n\n[OK]")
+                                    ok = input(": ")
+                                    nome_cenario_atual=cenario_atual["volta"]
+                                    
+                                            
+                        elif escolha=="jogar mario kart":
+                            print("\n\n{0}\n\n". format("_"*(len(escolha)+3)))
+                            print("Você resolveu jogar Mario Kart com uns veteranos. Não vejo como isso te ajuda, você tá só perdendo tempo da sua busca\n\n\n[OK]")
+                            ok=input(": ")
+                            
+                                                
+                                    
+                    
+                            
                         else:
                             print("\n\nComando inválido\n")
                     elif cenario_atual["contador"]==2:
@@ -374,10 +641,17 @@ def main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atu
                    
                 else:
                     print("\n\nComando inválido")
+                
+        
+    
+                
+
+    
 
 
 # Programa principal.
 if __name__ == "__main__":
+    
     comeco = True
     while comeco:
         print("\n\n____________________\n\n")
@@ -407,13 +681,16 @@ if __name__ == "__main__":
     print("\n\nMassa. Mas voltando agora pra todo aquele negócio de ter que encontrar o Raul:\n\n")
     print("[OK]")
     ok = input(": ")
-    hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual = main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
-    with open('Binha_Noza.txt','r') as arquivo:
-       conteudo = arquivo.read()
-       print (conteudo)
-       if hp<=0:
-           print("\n\nCaso você se lembre do nome de uma sala, você pode se teleportar pra ela para voltar ao jogo\n\n")
-           escolha=arruma(input(": "))
-           if escolha in cenarios:
-               nome_cenario_atual = escolha
-               main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
+    hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual,escolha = main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
+    while hp<=0 and escolha=="desistir":
+        with open('Binha_Noza.txt','r') as arquivo:
+           conteudo = arquivo.read()
+           print (conteudo)
+           while hp<=0:
+               print("\n\nCaso você se lembre do nome de uma sala, você pode se teleportar pra ela para voltar ao jogo\n\n")
+               escolha=arruma(input(": "))
+               if escolha in cenarios:
+                   nome_cenario_atual = escolha
+                   main(hp,maxhp,inventario,dinheiro,armor,capacidade,cenarios,nome_cenario_atual)
+               else:
+                    break
